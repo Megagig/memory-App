@@ -1,0 +1,14 @@
+{
+  "name": "memory-app",
+  "version": "1.0.0",
+  "description": "A Kodecamp Intermediate entry Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Obi Anthony",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.1.1"
+  }
+}
