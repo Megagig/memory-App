@@ -1,13 +1,31 @@
 const http = require('http');
+const fs = require('fs');
 const authMiddleware = require('./auth');
 
 const server = http.createServer((req, res) => {
   authMiddleware(req, res, () => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World');
+    if (req.url === '/memories' && req.method === 'GET') {
+      fs.readFile('./memories.json', 'utf8', (err, data) => {
+        res.end(data);
+      });
+    } else if (req.url === '/memories' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+      req.on('end', () => {
+        fs.readFile('./memories.json', 'utf8', (err, data) => {
+          const memories = JSON.parse(data);
+          memories.push(JSON.parse(body));
+          fs.writeFile('./memories.json', JSON.stringify(memories), (err) => {
+            res.end('Memory created');
+          });
+        });
+      });
+    } else {
+      res.end('Invalid route');
+    }
   });
-  res.end('Hello World');
 });
 
 server.listen(3000, () => {
